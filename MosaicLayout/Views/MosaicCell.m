@@ -72,7 +72,7 @@
     
     //  Added black stroke
     self.layer.borderWidth = 1;
-    self.layer.borderColor = [UIColor blackColor].CGColor;
+    self.layer.borderColor = [UIColor whiteColor].CGColor;
     self.clipsToBounds = YES;
     
     //  UILabel for title    
