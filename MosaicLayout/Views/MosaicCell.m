@@ -118,21 +118,6 @@
     return _mosaicData;
 }
 
--(void)setHighlighted:(BOOL)highlighted{
-    
-    //  This avoids the animation runs every time the cell is reused
-    if (self.isHighlighted != highlighted){
-        _imageView.alpha = 0.0;
-        UIImageView* __weak weakImageView = _imageView;
-        [UIView animateWithDuration:0.3 animations:^{
-            UIImageView* strongImageView = weakImageView;
-            strongImageView.alpha = 1.0;
-        }];
-    }
-    
-    [super setHighlighted:highlighted];    
-}
-
 -(void)setMosaicData:(MosaicData *)newMosaicData{
 
     _mosaicData = newMosaicData;
