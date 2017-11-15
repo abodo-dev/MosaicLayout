@@ -127,26 +127,21 @@
     if ([_mosaicData.imageFilename hasPrefix:@"http://"] ||
         [_mosaicData.imageFilename hasPrefix:@"https://"]){
         //  Download image from the web
+      
         MosaicCell* __weak weakSelf = self;
-        void (^imageSuccess)(AFHTTPRequestOperation *operation, id downloadedImage) = ^(AFHTTPRequestOperation *operation, id downloadedImage){
-            MosaicCell* strongSelf = weakSelf;
-            
-            //  This check is to avoid wrong images on reused cells
-            if ([newMosaicData.title isEqualToString:strongSelf->_mosaicData.title]){
-                strongSelf.image = downloadedImage;
-            }
-        };
+      void (^imageSuccess)(NSURLSessionDataTask *task, id downloadedImage) = ^(NSURLSessionDataTask *task, id downloadedImage) {
+        MosaicCell* strongSelf = weakSelf;
         
-        NSURL *anURL = [NSURL URLWithString:_mosaicData.imageFilename];
-        NSURLRequest *anURLRequest = [NSURLRequest requestWithURL:anURL];
-        
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:anURLRequest];
-        operation.responseSerializer = [AFImageResponseSerializer serializer];
-        [operation setCompletionBlockWithSuccess:imageSuccess failure:^(AFHTTPRequestOperation *op, NSError *error) {
-            NSLog(@"Image error: %@", error);
-        }];
-
-        [operation start];
+        //  This check is to avoid wrong images on reused cells
+        if ([newMosaicData.title isEqualToString:strongSelf->_mosaicData.title]){
+          strongSelf.image = downloadedImage;
+        }
+      };
+      
+      NSURL *anURL = [NSURL URLWithString:_mosaicData.imageFilename];
+      AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+      manager.responseSerializer = [AFImageResponseSerializer serializer];
+      [manager GET:anURL.absoluteString parameters:nil progress:nil success:imageSuccess failure:nil];
     }else{
         //  Load image from bundle
         self.image = [UIImage imageNamed:_mosaicData.imageFilename];
