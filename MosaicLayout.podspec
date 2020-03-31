@@ -27,5 +27,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'MosaicLayout/**/*.{h,m}'
-  s.dependency 'AFNetworking', '3.1.0'
+  s.dependency 'AFNetworking', '3.2.1'
 end
